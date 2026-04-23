@@ -5,6 +5,8 @@ public class FogNode {
     private int alertCount;
     private int id;
 
+    private List<SensorData> buffer = new ArrayList<>();
+
     public FogNode (CloudServer cloudServer, int id){
         this.CLOUDSERVER = cloudServer;
         this.id = id;
@@ -27,10 +29,30 @@ public class FogNode {
             
         } else
             System.out.println("[FOG] Temperatura normal");
-
-            CLOUDSERVER.saveData(data);
     } 
+    
+    buffer.add(data);
 
+        if(buffer.size() == 5){
+            sendToCloud();
+        }
+    }
+
+    private void sendToCloud(){
+        System.out.println("Enviando paquete de 5 datos al CLOUD");
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(SensorData d : buffer){
+            CLOUDSERVER.saveData(d);
+        }
+
+        buffer.clear();
+    }
 
     public int getAlertCount(){
         return alertCount;
