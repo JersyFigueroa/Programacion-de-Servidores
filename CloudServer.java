@@ -27,6 +27,7 @@ public class CloudServer {
             sum += data.getTEMPERATURE();
         }
         
+        double average = sum / dataList.size();
         
         System.out.println("Media de temperatura: "+ String.format("%.2f", average));
         
